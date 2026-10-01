@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html, body {
+  background-color: #04070d;
+  color: #e9f0fb;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .glass {
+    @apply bg-navy-850/70 backdrop-blur-md border border-white/5;
+  }
+  .glass-panel {
+    @apply bg-navy-850/80 backdrop-blur-md border border-white/5 rounded-xl shadow-panel;
+  }
+  .chip {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold tracking-wide uppercase;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-150 disabled:opacity-40 disabled:pointer-events-none select-none;
+  }
+  .btn-primary {
+    @apply btn bg-cyanx-500/15 border border-cyanx-500/40 text-cyanx-300 hover:bg-cyanx-500/25 hover:border-cyanx-400/60;
+  }
+  .btn-solid {
+    @apply btn bg-cyanx-500 text-navy-950 hover:bg-cyanx-400 shadow-glowc;
+  }
+  .btn-danger {
+    @apply btn bg-danger-500/15 border border-danger-500/40 text-danger-400 hover:bg-danger-500/25;
+  }
+  .btn-danger-solid {
+    @apply btn bg-danger-500 text-white hover:bg-danger-400 shadow-glows;
+  }
+  .btn-safe {
+    @apply btn bg-safe-500/15 border border-safe-500/40 text-safe-400 hover:bg-safe-500/25;
+  }
+  .btn-ghost {
+    @apply btn bg-white/[0.04] border border-white/10 text-ink-200 hover:bg-white/[0.08] hover:text-ink-100;
+  }
+  .input {
+    @apply w-full bg-navy-800/80 border border-white/10 rounded-lg px-3.5 py-2 text-sm text-ink-100 placeholder:text-ink-400 focus:outline-none focus:border-cyanx-500/50 focus:ring-1 focus:ring-cyanx-500/30;
+  }
+  .th {
+    @apply text-left text-[11px] font-semibold tracking-wider text-ink-300 uppercase px-4 py-3 whitespace-nowrap;
+  }
+  .td {
+    @apply px-4 py-3 text-sm text-ink-200 whitespace-nowrap;
+  }
+  .kpi-value {
+    @apply text-2xl font-bold text-ink-100 tabular-nums;
+  }
+  .section-title {
+    @apply text-[13px] font-semibold tracking-wider text-ink-300 uppercase flex items-center gap-2;
+  }
+}
+
+/* Subtle animated grid backdrop for hero/investigation areas */
+.cyber-grid {
+  background-image:
+    linear-gradient(rgba(56, 225, 245, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 225, 245, 0.05) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: gridPan 6s linear infinite;
+}
+
+@keyframes gridPan {
+  from { background-position: 0 0; }
+  to { background-position: 48px 48px; }
+}
+
+/* Thin scrollbars */
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #1e2f4d; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: #2a3f66; }
+
+/* Recharts tooltip on dark */
+.recharts-default-tooltip {
+  background-color: rgba(10, 17, 31, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 8px;
+}
