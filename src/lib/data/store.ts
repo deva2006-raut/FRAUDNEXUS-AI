@@ -4,7 +4,7 @@
  * ⚠️ DEMO SIMULATION — all entities and investigations are synthetic.
  */
 import { CUSTOMERS, type CustomerSeed } from "./customers";
-import { DEMO_SUSPICIOUS_SPEC, generateHistory, injectSuspicious, quickFlagScore, type Tx } from "./transactions";
+import { DEMO_SUSPICIOUS_SPEC, generateHistory, injectSuspicious, makeTestTx, quickFlagScore, type Tx } from "./transactions";
 import type { InvestigationRecord } from "../investigations";
 
 export interface AlertItem {
@@ -51,12 +51,23 @@ function build(): World {
       history.unshift(suspicious);
       suspiciousTxns.push(suspicious);
       txns.set(suspicious.txnId, suspicious);
+      // Supporting "test transfer": ₹2,900 to the same first-time beneficiary 31 minutes
+      // earlier. Solo it stays below alert thresholds, but it gives the Pattern Agent a
+      // rapid-transfer cluster (test-then-large chain) → flagship scores 91/100 with 6 factors.
+      let testId = "TXN-1086";
+      while (history.some((t) => t.txnId === testId) || txns.has(testId)) {
+        testId = "TXN-" + (parseInt(testId.slice(4), 10) - 1);
+      }
+      const testTx = makeTestTx(seed, DEMO_SUSPICIOUS_SPEC, testId, { amount: 2900, hour: 2, minute: 41 });
+      history.push(testTx);
+      txns.set(testTx.txnId, testTx);
+      history.sort((a, b) => (a.date === b.date ? b.time.localeCompare(a.time) : b.date.localeCompare(a.date)));
       alerts.push({
         alertId: `ALRT-${String(alertSeq++).padStart(4, "0")}`,
         type: "HIGH-RISK TRANSACTION DETECTED",
         title: "High-risk transaction TXN-1087",
         message:
-          "₹2,85,000 IMPS at 03:12 AM from Mumbai, MH via New Device B to V.K. Enterprises (New Beneficiary) — 28× above typical range for Rahul Sharma.",
+          "₹2,85,000 IMPS at 03:12 AM from Mumbai, MH via New Device B to V.K. Enterprises (New Beneficiary) — 29× above typical range for Rahul Sharma. A ₹2,900 test transfer to the same beneficiary preceded it at 02:41 AM.",
         severity: "critical",
         timestamp: "2026-09-30 03:12",
         txnId: "TXN-1087",

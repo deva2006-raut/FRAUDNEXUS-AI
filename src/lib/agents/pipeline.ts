@@ -184,7 +184,9 @@ function agentPattern(input: PipelineInput): { findings: string[]; patterns: Pat
         relatedTxnIds: [txn.txnId, ...cluster.map((t) => t.txnId)],
       });
     }
-    const smallFirst = cluster.find((t) => t.amount < txn.amount * 0.05 && !customer.commonBeneficiaries.includes(t.beneficiary));
+    const smallFirst = cluster.find(
+      (t) => t.amount < txn.amount * 0.05 && !customer.commonBeneficiaries.includes(t.beneficiary) && toMin(t.time) < txn.hour * 60 + minute
+    );
     if (smallFirst) {
       patterns.push({
         key: "test_then_large",

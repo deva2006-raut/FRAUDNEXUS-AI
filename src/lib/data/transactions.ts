@@ -187,6 +187,33 @@ export function injectSuspicious(c: CustomerSeed, history: Tx[], spec: Suspiciou
   return tx;
 }
 
+/**
+ * Small pre-flag "verification" transfer that supports the flagship case narrative.
+ * Individually it stays below alert thresholds (looks benign solo) — but the Pattern
+ * Agent correlates it with the large transfer that follows (test-then-large chain).
+ */
+export function makeTestTx(
+  c: CustomerSeed,
+  spec: SuspiciousSpec,
+  txnId: string,
+  opts: { amount: number; hour: number; minute: number }
+): Tx {
+  const tx = baseTx(c, txnId);
+  tx.amount = opts.amount;
+  tx.date = spec.date ?? "2026-09-30";
+  tx.hour = opts.hour;
+  tx.time = `${pad(opts.hour)}:${pad(opts.minute)}`;
+  tx.type = spec.type ?? "IMPS";
+  tx.location = spec.location;
+  tx.deviceId = spec.deviceId;
+  tx.deviceLabel = spec.deviceLabel;
+  tx.beneficiary = spec.beneficiary;
+  tx.status = "Success";
+  tx.note = "Small verification transfer — not individually alerted; correlated by the Pattern Agent.";
+  finishTx(tx, /*suspicious*/ false, /*scoreOverride*/ 14);
+  return tx;
+}
+
 /** Compute an immediate heuristic flag score for a transaction vs its customer baseline (pre-investigation). */
 export function quickFlagScore(c: CustomerSeed, tx: Tx): number {
   let s = 0;

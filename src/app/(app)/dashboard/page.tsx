@@ -9,12 +9,16 @@ import {
 import { getWorld } from "@/lib/data/store";
 import { listInvestigations } from "@/lib/investigations";
 import { fmtINR, fmtTime12 } from "@/lib/format";
-import { Panel, RiskBadge, StatusBadge, EmptyState, LinkBtn } from "@/components/ui";
+import { Panel, RiskBadge, EmptyState, LinkBtn } from "@/components/ui";
 import { AgentFlowStatic } from "@/components/AgentFlow";
 
 const COLORS: Record<string, string> = {
   Low: "#22C58A", Medium: "#F58A2E", High: "#F04A4A", Critical: "#FF3B3B",
 };
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+/** "2026-09-30" → "30 Sep" (compact table-friendly date). */
+const fmtDay = (d: string) => `${parseInt(d.slice(8), 10)} ${MONTHS[parseInt(d.slice(5, 7), 10) - 1] ?? ""}`;
 
 export default function DashboardPage() {
   const world = getWorld();
@@ -149,8 +153,8 @@ export default function DashboardPage() {
                 <thead>
                   <tr className="border-b border-white/5">
                     <th className="th">Transaction</th><th className="th">Customer</th><th className="th">Amount</th>
-                    <th className="th">Time</th><th className="th">Location</th><th className="th">Device</th>
-                    <th className="th">Risk</th><th className="th">Status</th><th className="th">Action</th>
+                    <th className="th">Time</th><th className="th hidden xl:table-cell">Location</th><th className="th hidden 2xl:table-cell">Device</th>
+                    <th className="th">Risk</th><th className="th">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -159,11 +163,10 @@ export default function DashboardPage() {
                       <td className="td font-mono text-xs text-cyanx-300">{tx.txnId}</td>
                       <td className="td">{world.customers.get(tx.customerId)?.seed.name ?? tx.customerId}</td>
                       <td className="td font-semibold">{fmtINR(tx.amount)}</td>
-                      <td className="td text-xs">{tx.date} · {fmtTime12(tx.time)}</td>
-                      <td className="td text-xs">{tx.location}</td>
-                      <td className="td text-xs max-w-[160px] truncate" title={tx.deviceLabel}>{tx.deviceLabel}</td>
+                      <td className="td text-xs">{fmtDay(tx.date)} · {fmtTime12(tx.time)}</td>
+                      <td className="td text-xs hidden xl:table-cell">{tx.location}</td>
+                      <td className="td text-xs max-w-[150px] truncate hidden 2xl:table-cell" title={tx.deviceLabel}>{tx.deviceLabel}</td>
                       <td className="td"><RiskBadge level={tx.riskLevel} score={tx.riskScore} /></td>
-                      <td className="td"><StatusBadge status={tx.statusClass} /></td>
                       <td className="td">
                         <LinkBtn href={`/investigate/${tx.txnId}`} variant="primary" className="!px-2.5 !py-1 !text-xs">Investigate</LinkBtn>
                       </td>
