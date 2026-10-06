@@ -176,3 +176,7 @@ src/
 ⚠️ Hackathon prototype · synthetic demo data only · not a real fraud model · no fraud determinations
 
 </div>
+
+## 🔗 Connect
+
+- [LinkedIn — Devanshu Raut](https://www.linkedin.com/in/devanshu-raut-632167334/)

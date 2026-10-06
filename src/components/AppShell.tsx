@@ -110,7 +110,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
         <footer className="border-t border-white/5 px-6 py-3">
           <p className="text-[10px] text-ink-400 leading-relaxed">
-            FRAUDNEXUS AI is a hackathon prototype using synthetic/demo financial data. It does not make definitive fraud determinations and is designed to support human investigation.
+            FRAUDNEXUS AI is a hackathon prototype using synthetic/demo financial data. It does not make definitive fraud determinations and is designed to support human investigation. Built by <a href="https://github.com/deva2006-raut" className="underline hover:text-white" target="_blank" rel="noreferrer">Devanshu Raut</a> · <a href="https://www.linkedin.com/in/devanshu-raut-632167334/" className="underline hover:text-white" target="_blank" rel="noreferrer">LinkedIn</a>.
           </p>
         </footer>
       </div>
